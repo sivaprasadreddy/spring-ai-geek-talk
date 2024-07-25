@@ -2,16 +2,18 @@ package com.sivalabs.geektalk;
 
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HtmxResponse;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,18 +24,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
+@Slf4j
 class ChatController {
-    private static final Logger log = LoggerFactory.getLogger(ChatController.class);
-
     private final Profiles profiles;
     private final ChatClient chatClient;
     private final Parser parser;
     private final HtmlRenderer renderer;
 
     ChatController(Profiles profiles,
-                   ChatClient.Builder chatClientBuilder) {
+                   ChatClient.Builder builder,
+                   VectorStore vectorStore) {
         this.profiles = profiles;
-        this.chatClient = chatClientBuilder.build();
+        this.chatClient = builder
+                .defaultAdvisors(new QuestionAnswerAdvisor(vectorStore, SearchRequest.defaults()))
+                .build();
         this.parser = Parser.builder().build();
         this.renderer = HtmlRenderer.builder()
                 .escapeHtml(false)
@@ -66,10 +70,10 @@ class ChatController {
                 List.of(systemMessage, userMessage)))
                 .call().chatResponse();
         String response = chatResponse.getResult().getOutput().getContent();
-        System.out.println("AI Response = " + response);
+        log.info("AI Response = {}", response);
         Node document = parser.parse(response);
         String htmlResponse = renderer.render(document);
-        System.out.println("htmlResponse = " + htmlResponse);
+        log.info("htmlResponse = {}", htmlResponse);
 
         model.addAttribute("profileName", profile.name());
         model.addAttribute("response", htmlResponse);
@@ -77,7 +81,6 @@ class ChatController {
 
         return HtmxResponse.builder()
                 .view("response :: responseFragment")
-                //.view("recent-message-list :: messageFragment")
                 .build();
     }
 }

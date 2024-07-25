@@ -8,6 +8,8 @@
 ```shell
 # Run mistral model
 $ ollama run mistral
+# codegemma model for coding-tasks
+$ ollama run codegemma
 
 # Run/Debug application from IDE
 Run `GeekTalkApplication.java` from IDE.

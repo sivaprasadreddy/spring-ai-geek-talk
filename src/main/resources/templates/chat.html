@@ -16,6 +16,7 @@
     <div class="container position-relative bottom-0" style="width:100%">
         <form class="pb-2"
               th:hx-post="${'/profiles/'+profile.id()+'/chat'}"
+              hx-disabled-elt="#sendBtn"
               hx-swap="beforeend"
               hx-target="#conversations"
               hx-on:htmx:after-request="document.getElementById('message').value='';">
@@ -23,7 +24,7 @@
                 <label for="message" class="form-label">Message</label>
                 <textarea class="form-control" id="message" name="message" rows="3"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Send</button>
+            <button id="sendBtn" type="submit" class="btn btn-primary">Send</button>
         </form>
     </div>
 </div>

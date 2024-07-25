@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="responseFragment">
+    <div class="pb-2">
+        <h5>You:</h5>
+        <p th:text="${message}">
+            User Message
+        </p>
+
+        <h5>[[${profileName}]]:</h5>
+        <p th:utext="${response}">
+            System Response
+        </p>
+    </div>
+</div>
+</body>

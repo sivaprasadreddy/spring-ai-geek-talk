@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div id="response-container" class="overflow-y-scroll"
+            style="height: 580px">
+
+        <div id="conversations">
+        </div>
+
+    </div>
+    <div class="container position-relative bottom-0" style="width:100%">
+        <form class="pb-2"
+              th:hx-post="${'/profiles/'+profile.id()+'/chat'}"
+              hx-swap="beforeend"
+              hx-target="#conversations"
+              hx-on:htmx:after-request="document.getElementById('message').value='';">
+            <div class="mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" id="message" name="message" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

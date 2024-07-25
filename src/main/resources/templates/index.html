@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+
+    <div class="row">
+        <div class="col-sm-6 mb-3 mb-sm-0" th:each="profile: ${profiles}">
+            <div class="card" >
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${profile.name +' - '+profile.title}">Profile Title</h5>
+                    <div class="card-text pb-2">
+                        <p>[[${profile.bio}]]</p>
+                        <h4>AI Persona</h4>
+                        [[${profile.aiPersona}]]
+                    </div>
+                    <a href="#" th:href="${'/profiles/'+profile.id()+'/chat'}" class="btn btn-primary">Chat</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

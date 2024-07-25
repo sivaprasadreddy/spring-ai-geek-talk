@@ -1,0 +1,6 @@
+name: geektalk
+services:
+  chroma:
+    image: ghcr.io/chroma-core/chroma:latest
+    ports:
+      - 8200:8000

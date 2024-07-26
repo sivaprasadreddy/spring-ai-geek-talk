@@ -191,11 +191,11 @@ At this stage, I would recommend focusing on learning Architecture concepts.
 
 * [Microservices.io](https://microservices.io/)
 
-## Learning Resources
+## Spring Boot Learning Resources
 * [Spring Website](https://spring.io)
 * [Spring Academy](https://spring.academy/)
 * [Spring Boot Guides](https://spring.io/guides)
-* [Spring IO YouTube channel](https://www.youtube.com/@SpringIOConference)
+* [Spring I/O YouTube channel](https://www.youtube.com/@SpringIOConference)
 * [Spring Developer YouTube channel](https://www.youtube.com/@SpringSourceDev)
 * [Josh Long YouTube channel](https://www.youtube.com/@coffeesoftware)
 * [SivaLabs Blog](https://sivalabs.in)

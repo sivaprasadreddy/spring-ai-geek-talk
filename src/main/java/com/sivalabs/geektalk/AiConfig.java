@@ -21,7 +21,7 @@ class AiConfig {
     );
 
     @Bean
-    ApplicationRunner intVectorStore(VectorStore vectorStore) {
+    ApplicationRunner initVectorStore(VectorStore vectorStore) {
         return args -> {
             load(vectorStore, classpathResources);
         };

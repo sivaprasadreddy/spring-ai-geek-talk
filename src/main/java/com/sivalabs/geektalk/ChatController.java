@@ -8,10 +8,7 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
-import org.springframework.ai.chat.messages.SystemMessage;
-import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Controller;
@@ -20,8 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -64,12 +59,14 @@ class ChatController {
             @RequestParam String message, Model model) {
         log.info("User Message: {}", message);
         var profile = profiles.getProfileById(id).orElseThrow();
-        UserMessage userMessage = new UserMessage(message);
-        SystemMessage systemMessage = new SystemMessage(profile.aiPersona());
-        ChatResponse chatResponse = chatClient.prompt(new Prompt(
-                List.of(systemMessage, userMessage)))
-                .call().chatResponse();
-        String response = chatResponse.getResult().getOutput().getContent();
+        String response = chatClient.prompt()
+                        .system(profile.aiPersona())
+                        .user(message)
+                        .options(OllamaOptions.create()
+                            //.withNumCtx(8192)
+                            .withTopK(10)
+                        )
+                        .call().content();
         log.info("AI Response = {}", response);
         Node document = parser.parse(response);
         String htmlResponse = renderer.render(document);

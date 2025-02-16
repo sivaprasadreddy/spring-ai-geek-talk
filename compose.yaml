@@ -1,6 +1,8 @@
 name: geektalk
 services:
-  chroma:
-    image: ghcr.io/chroma-core/chroma:latest
+  redis:
+    image: 'redis/redis-stack:latest'
+    labels:
+      - "org.springframework.boot.service-connection=redis"
     ports:
-      - 8200:8000
+      - '6379:6379'
